@@ -184,10 +184,10 @@ Unfortunately there is no solution available for these vulnerabilities at the mo
 We note that the above vulnerabilities were found within a short period of time without a systematic approach. Based on the vulnerability types we found and the overall code quality, the devices should contain much more problems.
 
 ## Credits ##
-This vulnerability was discovered and researched by Gergely Eberhardt from SEARCH-LAB Ltd. (www.search-lab.hu)
+This vulnerability was discovered and researched by Gergely Eberhardt (@ebux25) from SEARCH-LAB Ltd. (www.search-lab.hu)
 
 ## References ##
-[1] http://www.search-lab.hu/advisories/xxx
-[2] https://youtu.be/ xxx
+[1] http://www.search-lab.hu/advisories/126-avtech-devices-multiple-vulnerabilities
+[2] https://youtu.be/BUx8nLlIMxI
 [3] https://github.com/ebux/AVTECH
-[4] vulnerability_matrix.txt
+[4] http://www.search-lab.hu/media/vulnerability_matrix.txt
