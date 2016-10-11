@@ -1,7 +1,7 @@
 # Avtech devices multiple vulnerabilities #
 
 ## Platforms / Firmware confirmed affected: ##
-- Every Avtech device (IP camera, NVR, DVR) and firmware version. [4] contains the list of confirmed firmware versions, which are affected.
+- Every Avtech device (IP camera, NVR, DVR) and firmware version. [[4]](http://www.search-lab.hu/media/vulnerability_matrix.txt) contains the list of confirmed firmware versions, which are affected.
 - Product page: http://www.avtech.com.tw/
 
 “AVTECH, founded in 1996, is one of the world’s leading CCTV manufacturers. With stably increasing revenue and practical business running philosophy, AVTECH has been ranked as the largest public-listed company among the Taiwan surveillance industry. AVTECH makes every effort on the innovation of technology, product and implementation. Based on years of research and industry experience, AVTECH has obtained a leading position on mobile platform support and provides a full range of surveillance products.”
@@ -164,7 +164,7 @@ The SyncCloudAccount.sh, QueryFromClient.sh and SyncPermit.sh scripts use wget t
 - 2016.10.11: Full disclosure
 
 ## POC ##
-POC script is available to demonstrate the following problems [3]:
+POC script is available to demonstrate the following problems [[3]](https://github.com/ebux/AVTECH):
 - Unauthenticated information leakage (capabilities)
 - Authentication bypass (.cab, nobody)
 - Unauthenticated SSRF on DVR devices
@@ -173,7 +173,7 @@ POC script is available to demonstrate the following problems [3]:
 - CloudSetup.cgi command injection after authentication
 - adcommand.cgi command injection after authentication
 
-A video demonstration is also available [[1]](http://www.search-lab.hu/advisories/126-avtech-devices-multiple-vulnerabilities), which presents some of the above problems.
+A video demonstration is also available [[2]](https://youtu.be/BUx8nLlIMxI), which presents some of the above problems.
 
 ## Recommendations ##
 ---------------
@@ -188,6 +188,9 @@ This vulnerability was discovered and researched by Gergely Eberhardt (@ebux25) 
 
 ## References ##
 [1] http://www.search-lab.hu/advisories/126-avtech-devices-multiple-vulnerabilities
+
 [2] https://youtu.be/BUx8nLlIMxI
+
 [3] https://github.com/ebux/AVTECH
+
 [4] http://www.search-lab.hu/media/vulnerability_matrix.txt
