@@ -173,7 +173,7 @@ POC script is available to demonstrate the following problems [3]:
 - CloudSetup.cgi command injection after authentication
 - adcommand.cgi command injection after authentication
 
-A video demonstration is also available [1], which presents some of the above problems.
+A video demonstration is also available [1](http://www.search-lab.hu/advisories/126-avtech-devices-multiple-vulnerabilities), which presents some of the above problems.
 
 ## Recommendations ##
 ---------------
