@@ -1,0 +1,16 @@
+1) Plaintext storage of administrative password
+2) Missing CSRF protection
+3) Unauthenticated information disclosure under the /cgi-bin/nobody folder
+4) Unauthenticated SSRF in DVR devices
+5) Unauthenticated command injection in DVR devices
+6) Authentication bypass if the URL contains the ".cab" string
+7) Authentication bypass via the the /cgi-bin/nobody folder
+8) Unauthenticated file download from web root
+9) Login captcha bypass via the "login=quick" parameter
+10) Login captcha bypass by manually setting specific cookies
+11) Authenticated command injection in CloudSetup.cgi
+12) Authenticated command injection in adcommand.cgi
+13) Authenticated command injection in PwdGrp.cgi
+14) HTTPS used without certificate verification
+
+
